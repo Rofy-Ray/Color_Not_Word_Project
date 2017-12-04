@@ -16,6 +16,7 @@
 
 import tkinter          #Import the module needed for creating a GUI
 import random           #Import the module needed for generatinf random numbers
+import time
 
 class Gambit:
     def __init__(self):
@@ -35,11 +36,49 @@ class Gambit:
         '''
         return "()".format(self.color_pick)
 
-    def game_over(self):
+    def game_timer(self):
         '''
-
+        Creates a timer that will be used for playing the game
         :return:
         '''
-        if self.time_remain == 45:
-            countdown()
+        global time_remain          #Use globally declared 'playtime' variable above
+
+        if time_remain > 0:         #Condition runs if game is currently in session
+            time_remain -= 1        #Decreases the amount of time left on the timer
+            timerLabel.config(text = 'Time remaining: ' + str(time_remain))       #Updates the time remaining label
+            timerLabel.after(1000, game_timer)                                    #Runs the function again after each second
+
+    def extract_color(self):
+        '''
+        Gets colors from the text file and put them into a list to be used by the game
+        :return:
+        '''
+        theFile = open('color.txt', 'r')
+        while True:
+            myColors = theFile.readline()
+            self.color_pick.append(myColors)
+            break
+        theFile.close()
+
+    def next_color_word(self):
+        '''
+        Chooses and displays the next color word text to display and the color for printing the text
+        :return:
+        '''
+        global score_board          #Use globally declared 'scores' variable above
+        global time_remian          #Use globally declared 'playtime' variable above
+
+        if time_remian > 0:         #Condition runs if game is currently in session
+            text_entry.set_focus()  #Makes the text entry box active if game is in session
+
+            if text_entry.get().lower() = color_pick[].lower():      #Checks if color entered by user equals the text color
+                score_board += 1                                #Adds one to the score of the user
+
+            text_entry.delete(0, tkinter.END)                   #Clears the text entry box
+
+    def game_over(self):
+        '''
+        Checks if game has not began and starts the timer
+        :return:
+        '''
 
