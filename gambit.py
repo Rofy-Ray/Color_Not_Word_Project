@@ -76,10 +76,10 @@ class Gambit:
 
             text_entry.delete(0, tkinter.END)                   #Clears the text entry box
             random.shuffle(self.color_pick)                     #Shuffke the list of colors
-            label.config(fg = str(color_pick[1]), text = str(color_pick[0]))    #Changes the color to type by
+            colorLabel.config(fg = str(color_pick[1]), text = str(color_pick[0]))    #Changes the color to type by
                                                                                 #changing the color and text to a
                                                                                 #random color value
-            Interface.build_GUI().scoresLabel.config(text = 'Your score: ' + str(score_board))     #Updates the score board
+            Interface.build_GUI().config(text = 'Your score: ' + str(score_board))     #Updates the score board
 
     def game_over(self):
         '''
@@ -95,6 +95,11 @@ class Interface:
 
         '''
         self.game_hub = tkinter.Tk()            #Creates a GUI window for the game
+        self.rule = ''
+        self.scoresLabel = ''
+        self.timerLabel = ''
+        self.colorLabel = ''
+
 
     def build_GUI(self):
         '''
@@ -114,13 +119,18 @@ class Interface:
 
         #Add a time remaining label to the GUI
         timerLabel = tkinter.Label(self.game_hub, text = 'Time remaining: ' + str(time_remain), font = ('Tahoma', 12))
-        timerLabel.pack()
+        timerLabel.pack()           #Adds the widget to the GUI
 
+        #Add a color label to the GUI to display the colors
+        colorLabel = tkinter.Label(self.game_hub, font = ('Tahoma', 50))
+        colorLabel.pack()       #Adds the widget to the GUI
 
+        text_entry = tkinter.Entry(self.game_hub)       #Creates the text entry box for the user to type in the colors
+        self.game_hub.bind('<Return>', Gambit.game_over()) #Run the game_over() function when the Enter key is pressed
+        text_entry.pack()           #Add the widget to the GUI
+        text_entry.focus_set()      #Sets the focus of the cursor in the text entry box
 
-
-
-
+        self.game_hub.mainloop()            #Starts the GUI
 
 
 
