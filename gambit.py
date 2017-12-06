@@ -86,6 +86,5 @@ class Gambit:
         Checks if game has not began and starts the timer
         :return:
         '''
-        
-
-
+        if time_remain == 45:               #Condition runs if
+            game_timer()                        #Start the countdown timer
