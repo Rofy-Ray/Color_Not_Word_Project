@@ -46,7 +46,7 @@ class Gambit:
         if time_remain > 0:         #Condition runs if game is currently in session
             time_remain -= 1        #Decreases the amount of time left on the timer
             timerLabel.config(text = 'Time remaining: ' + str(time_remain))       #Updates the time remaining label
-            timerLabel.after(1000, game_timer)                                    #Runs the function again after each second
+            timerLabel.after(1000, self.game_timer())                                    #Runs the function again after each second
 
     def extract_color(self):
         '''
@@ -79,7 +79,7 @@ class Gambit:
             label.config(fg = str(color_pick[1]), text = str(color_pick[0]))    #Changes the color to type by
                                                                                 #changing the color and text to a
                                                                                 #random color value
-            scoresLabel.config(text = 'Your score: ' + str(score_board))     #Updates the score board
+            Interface.build_GUI().scoresLabel.config(text = 'Your score: ' + str(score_board))     #Updates the score board
 
     def game_over(self):
         '''
@@ -87,4 +87,42 @@ class Gambit:
         :return:
         '''
         if time_remain == 45:               #Condition runs if there is still time left on the countdown timer
-            game_timer()                        #Start the countdown timer
+            self.game_timer()                        #Start the countdown timer
+
+class Interface:
+    def __init__(self):
+        '''
+
+        '''
+        self.game_hub = tkinter.Tk()            #Creates a GUI window for the game
+
+    def build_GUI(self):
+        '''
+
+        :return:
+        '''
+        self.game_hub.title('COOL GAME')        #Sets the title for the GUI window
+        self.game_hub.geometry('375 x 200')     #Sets the size of the GUI window
+
+        #Add an instructions label to the GUI
+        rule = tkinter.Label(self.game_hub, text = 'Type in the color of the word. NOT the word text!', font = ('Tahoma', 12))
+        rule.pack()         #Add the widget to the GUI
+
+        #Add a scores label to the GUI
+        scoresLabel = tkinter.Label(self.game_hub, text = 'Press Enter to begin the game', font = ('Tahoma', 12))
+        scoresLabel.pack()         #Add the widget to the GUI
+
+        #Add a time remaining label to the GUI
+        timerLabel = tkinter.Label(self.game_hub, text = 'Time remaining: ' + str(time_remain), font = ('Tahoma', 12))
+        timerLabel.pack()
+
+
+
+
+
+
+
+
+
+
+
