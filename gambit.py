@@ -26,28 +26,38 @@ class Gambit:
         self.color_pick = []            #List of possible colors to be picked
         self.score_board = 0            #Sets the starting score of the user to 0 until the game begins
         self.time_remain = 45           #Sets each game round timer to start at 45 secs
-        self.game_hub = tkinter.Tk()    #Creates the root window where all the widgets will be added
+        self.interface = Interface()
+
+        self.extract_color()
+        # print(self.color_pick)
+        self.next_color_word()
 
 
-    def __str__(self):
-        '''
-        Makes the str() function work with Gambits
-        :return: A formatted string for better printing
-        '''
-        return "()".format(self.color_pick)
 
-    def game_timer(self):
-        '''
-        Creates a timer that will be used for playing the game
-        :return:
-        '''
-        global time_remain          #Use globally declared 'playtime' variable above
+        # Always last
+        self.interface.game_hub.mainloop()
 
-        if time_remain > 0:         #Condition runs if game is currently in session
-            time_remain -= 1        #Decreases the amount of time left on the timer
-            timerLabel.config(text = 'Time remaining: ' + str(time_remain))       #Updates the time remaining label
-            timerLabel.after(1000, self.game_timer())                                    #Runs the function again after each second
+    # def __str__(self):
+    #     '''
+    #     Makes the str() function work with Gambits
+    #     :return: A formatted string for better printing
+    #     '''
+    #     return "()".format(self.color_pick)
+    #
+    # def game_timer(self):
+    #     '''
+    #     Creates a timer that will be used for playing the game
+    #     :return:
+    #     '''
+    #     global time_remain          #Use globally declared 'playtime' variable above
+    #
+    #     if time_remain > 0:         #Condition runs if game is currently in session
+    #         time_remain -= 1        #Decreases the amount of time left on the timer
+    #         timerLabel.config(text = 'Time remaining: ' + str(time_remain))       #Updates the time remaining label
+    #         timerLabel.after(1000, self.game_timer())                                    #Runs the function again after each second
+    #
 
+    # FIXME I only get one color!
     def extract_color(self):
         '''
         Gets colors from the text file and put them into a list to be used by the game
@@ -65,29 +75,29 @@ class Gambit:
         Chooses and displays the next color word text to display and the color for printing the text
         :return:
         '''
-        global score_board          #Use globally declared 'scores' variable above
-        global time_remian          #Use globally declared 'playtime' variable above
+        # global score_board          #Use globally declared 'scores' variable above
+        # global time_remian          #Use globally declared 'playtime' variable above
 
-        if time_remian > 0:         #Condition runs if game is currently in session
-            text_entry.set_focus()  #Makes the text entry box active if game is in session
+        if self.time_remain> 0:         #Condition runs if game is currently in session
+            self.interface.text_entry.set_focus()  #Makes the text entry box active if game is in session
 
-            if text_entry.get().lower() = color_pick[1].lower():      #Checks if color entered by user equals the text color
-                score_board += 1                                #Adds one to the score of the user
+            if self.interface.text_entry.get().lower() == random.choice(self.color_pick).lower():     #Checks if color entered by user equals the text color
+                self.score_board += 1                                #Adds one to the score of the user
 
-            text_entry.delete(0, tkinter.END)                   #Clears the text entry box
-            random.shuffle(self.color_pick)                     #Shuffke the list of colors
-            colorLabel.config(fg = str(color_pick[1]), text = str(color_pick[0]))    #Changes the color to type by
+            self.interface.text_entry.delete(0, tkinter.END)                   #Clears the text entry box
+            # random.shuffle(self.color_pick)                     #Shuffke the list of colors
+            self.interface.colorLabel.config(fg = str(random.choice(self.color_pick)), text = str(random.choice(self.color_pick)))    #Changes the color to type by
                                                                                 #changing the color and text to a
                                                                                 #random color value
-            Interface.build_GUI().config(text = 'Your score: ' + str(score_board))     #Updates the score board
+            self.interface.score_label().config(text = 'Your score: ' + str(self.score_board))     #Updates the score board
 
-    def game_over(self):
-        '''
-        Checks if game has not began and starts the timer
-        :return:
-        '''
-        if time_remain == 45:               #Condition runs if there is still time left on the countdown timer
-            self.game_timer()                        #Start the countdown timer
+    # def game_over(self):
+    #     '''
+    #     Checks if game has not began and starts the timer
+    #     :return:
+    #     '''
+    #     if time_remain == 45:               #Condition runs if there is still time left on the countdown timer
+    #         self.game_timer()                        #Start the countdown timer
 
 class Interface:
     def __init__(self):
@@ -99,6 +109,13 @@ class Interface:
         self.scoresLabel = ''
         self.timerLabel = ''
         self.colorLabel = ''
+        self.text_entry = None
+        self.build_GUI()
+        self.score_label()
+        self.color_label()
+        self.textbox()
+        self.timer_label()
+
 
 
     def build_GUI(self):
@@ -107,30 +124,60 @@ class Interface:
         :return:
         '''
         self.game_hub.title('COOL GAME')        #Sets the title for the GUI window
-        self.game_hub.geometry('375 x 200')     #Sets the size of the GUI window
+        self.game_hub.geometry('375x200')     #Sets the size of the GUI window
 
         #Add an instructions label to the GUI
-        rule = tkinter.Label(self.game_hub, text = 'Type in the color of the word. NOT the word text!', font = ('Tahoma', 12))
-        rule.pack()         #Add the widget to the GUI
+        self.rule = tkinter.Label(self.game_hub, text = 'Type in the color of the word. NOT the word text!', font = ('Tahoma', 12))
+        self.rule.pack()         #Add the widget to the GUI
+    #
+    def score_label(self):
+        '''
 
+        :return:
+        '''
         #Add a scores label to the GUI
-        scoresLabel = tkinter.Label(self.game_hub, text = 'Press Enter to begin the game', font = ('Tahoma', 12))
-        scoresLabel.pack()         #Add the widget to the GUI
+        self.scoresLabel = tkinter.Label(self.game_hub, text = 'Press Enter to begin the game', font = ('Tahoma', 12))
+        self.scoresLabel.pack()         #Add the widget to the GUI
 
+    def timer_label(self):
+        '''
+
+        :return:
+        '''
         #Add a time remaining label to the GUI
-        timerLabel = tkinter.Label(self.game_hub, text = 'Time remaining: ' + str(time_remain), font = ('Tahoma', 12))
-        timerLabel.pack()           #Adds the widget to the GUI
+        self.timerLabel = tkinter.Label(self.game_hub, text = 'Time remaining: ' + "0", font = ('Tahoma', 12))  #FIXME str(time_remain)
+        self.timerLabel.pack()           #Adds the widget to the GUI
 
+    def color_label(self):
+        '''
+
+        :return:
+        '''
         #Add a color label to the GUI to display the colors
-        colorLabel = tkinter.Label(self.game_hub, font = ('Tahoma', 50))
-        colorLabel.pack()       #Adds the widget to the GUI
+        self.colorLabel = tkinter.Label(self.game_hub, font = ('Tahoma', 50))
+        self.colorLabel.pack()       #Adds the widget to the GUI
 
-        text_entry = tkinter.Entry(self.game_hub)       #Creates the text entry box for the user to type in the colors
-        self.game_hub.bind('<Return>', Gambit.game_over()) #Run the game_over() function when the Enter key is pressed
-        text_entry.pack()           #Add the widget to the GUI
-        text_entry.focus_set()      #Sets the focus of the cursor in the text entry box
+    def textbox(self):
+        '''
 
-        self.game_hub.mainloop()            #Starts the GUI
+        :return:
+        '''
+        self.text_entry = tkinter.Entry(self.game_hub)       #Creates the text entry box for the user to type in the colors
+        # self.game_hub.bind('<Return>', Gambit.game_over()) #Run the game_over() function when the Enter key is pressed
+        self.text_entry.pack()           #Add the widget to the GUI
+        self.text_entry.focus_set()      #Sets the focus of the cursor in the text entry box
+
+def main():
+    '''
+
+    :return:
+    '''
+    g = Gambit()
+
+if __name__ == "__main__":
+    main()
+
+
 
 
 
