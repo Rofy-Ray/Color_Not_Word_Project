@@ -71,14 +71,21 @@ class Gambit:
         if time_remian > 0:         #Condition runs if game is currently in session
             text_entry.set_focus()  #Makes the text entry box active if game is in session
 
-            if text_entry.get().lower() = color_pick[].lower():      #Checks if color entered by user equals the text color
+            if text_entry.get().lower() = color_pick[1].lower():      #Checks if color entered by user equals the text color
                 score_board += 1                                #Adds one to the score of the user
 
             text_entry.delete(0, tkinter.END)                   #Clears the text entry box
+            random.shuffle(self.color_pick)                     #Shuffke the list of colors
+            label.config(fg = str(color_pick[1]), text = str(color_pick[0]))    #Changes the color to type by
+                                                                                #changing the color and text to a
+                                                                                #random color value
+            scoresLabel.config(text = 'Your score: ' + str(score_board))     #Updates the score board
 
     def game_over(self):
         '''
         Checks if game has not began and starts the timer
         :return:
         '''
+        
+
 
