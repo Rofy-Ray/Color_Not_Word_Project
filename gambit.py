@@ -27,20 +27,18 @@ class Gambit:
 
         self.color_pick = []          #List of possible colors to be picked
         self.score_board = 0            #Sets the starting score of the user to 0 until the game begins
-        self.time_remain = 45           #Sets each game round timer to start at 45 secs
+        self.time_remain = 15           #Sets each game round timer to start at 45 secs
         self.interface = Interface()
         self.interface.score = self.score_board
         self.interface.time_left = self.time_remain
 
-
-
         self.extract_color()
         # print(self.color_pick)
         self.next_color_word()
-        # self.game_over()
+        self.game_over()
         self.game_timer()
 
-        # self.interface.game_hub.bind('<Return>', self.game_over())              #Run the game_over() function when the Enter key is pressed
+        self.interface.game_hub.bind('<Return>', self.game_over())              #Run the game_over() function when the Enter key is pressed
 
 
         # Always last
@@ -65,7 +63,7 @@ class Gambit:
             # self.interface.timerLabel.config(text = 'Time remaining: ' + str(self.time_remain))       #Updates the time remaining label
             self.interface.timer_label(time_left=self.time_remain)
 
-            self.interface.timer_label.after(1000, self.game_timer())                             #Runs the function again after each second
+        # self.interface.game_hub.after(1000, self.game_timer())                             #Runs the function again after each second
 
     def extract_color(self):
         '''
@@ -104,14 +102,14 @@ class Gambit:
             self.interface.print_out(word, color)
 
             if self.interface.inputValue == word:     #Checks if color entered by user equals the text color
-                #     print(random.choice(self.color_pick))
+                # print(word)
                 self.score_board += 1                                #Adds one to the score of the user
 
-            # self.interface.text_entry.delete(0, tkinter.END)                   #Clears the text entry box
-            random.shuffle(self.color_pick)                     #Shuffle the list of colors
+                self.interface.text_entry.delete(0, tkinter.END)                   #Clears the text entry box
+                random.shuffle(self.color_pick)                     #Shuffle the list of colors
 
-            self.interface.print_out(word, color)
-            self.interface.score_label(score=self.score_board)
+        # self.interface.print_out(word, color)
+        # self.interface.score_label(score=self.score_board)
 
 
                 #Changes the color to type by changing the color and text to a random color value
@@ -121,14 +119,14 @@ class Gambit:
             # self.interface.scoresLabel = tkinter.Label(self.interface.game_hub, text = 'Your score is: ' + str(self.score_board), font = ('Tahoma', 12))
 
 
-    # def game_over(self):
-    #     '''
-    #     Checks if game has not began and starts the timer
-    #     :return:
-    #     '''
-    #
-    #     if self.time_remain == 45:               #Condition runs if there is still time left on the countdown timer
-    #         self.game_timer()                        #Start the countdown timer
+    def game_over(self):
+        '''
+        Checks if game has not began and starts the timer
+        :return:
+        '''
+
+        if self.time_remain == 15:               #Condition runs if there is still time left on the countdown timer
+            self.game_timer()                        #Start the countdown timer
 
 class Interface:
     def __init__(self):
@@ -150,7 +148,7 @@ class Interface:
         self.score_label(score=self.scoresLabel)
         # self.print_out(word=self.showword, color=self.showword)
         self.textbox()
-        self.timer_label(time_left=self.timerLabel)
+        # self.timer_label(time_left=self.timerLabel)
         self.retrieve_input()
         # self.color_label()
 
