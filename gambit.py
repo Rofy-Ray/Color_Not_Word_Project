@@ -88,7 +88,7 @@ class Gambit:
 
             self.interface.print_out(self.current_word, self.current_color)         #This displays the word text and the color of the text in the GUI
 
-    def check_for_winner(self):
+    def check_for_true(self):
         '''
         Checks to see if the user entry is equal to the randomly chosen text color. If the user entry matches the color of the text, new randomly chosen colors for
         the word text and text color are displayed
@@ -207,14 +207,14 @@ class Interface:
 
     def get_user_input(self, event):
         '''
-        Gets the user input and then deletes the user entry in the text box afte each input. Then makes a call to the check_for_winner method in the Gmabit class
+        Gets the user input and then deletes the user entry in the text box afte each input. Then makes a call to the check_for_true method in the Gmabit class
         :param event:
         :return: None
         '''
 
         self.gambit.user_input_color = self.text_entry.get('1.0', 'end-1c')[:-1]            #Gets the user input from the text box
         self.text_entry.delete(1.0, END)                                                    #Clears the text box
-        self.gambit.check_for_winner()                                                      #Calls the check_for_winner method in the Gambit class
+        self.gambit.check_for_true()                                                      #Calls the check_for_true method in the Gambit class
 
 def main():
     '''
