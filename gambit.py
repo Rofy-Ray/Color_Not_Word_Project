@@ -18,7 +18,6 @@
 
 
 from tkinter import *   #Import all from the tkinter module
-from PIL import ImageTk,Image
 import tkinter          #Import the module needed for creating a GUI
 import random           #Import the module needed for generatinf random numbers
 
