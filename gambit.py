@@ -18,9 +18,10 @@
 
 
 from tkinter import *   #Import all from the tkinter module
+from PIL import ImageTk,Image
 import tkinter          #Import the module needed for creating a GUI
 import random           #Import the module needed for generatinf random numbers
-from PIL import ImageTk,Image
+
 
 class Gambit:
 
@@ -132,11 +133,27 @@ class Interface:
 
         self.game_hub.title('GUESS THE COLOR')        #Sets the title for the GUI window
         self.game_hub.geometry('400x250')     #Sets the size of the GUI window
-        self.background_image = tkinter.PhotoImage('C:\\Users\\okyereforsonr\\Google Drive\\PYTHON\\FINAL PROJECT\\Color_Not_Word_Project\\colors.jpg')
-        self.background_label = tkinter.Label(self.game_hub, image = self.background_image)
-        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
-        # image2 =Image.open('C:\\Users\\okyereforsonr\\Google Drive\\PYTHON\\FINAL PROJECT\\colors.jpg')
-        # image1 = ImageTk.PhotoImage(image2)
+
+        canvas = tkinter.Canvas(self.game_hub, height=400, width=250, bg='salmon')
+        canvas.pack(fill=tkinter.BOTH, expand=tkinter.YES)
+
+        my_image = tkinter.PhotoImage(file='C://Users//okyereforsonr//Google Drive//PYTHON//FINAL PROJECT//Color_Not_Word_Project//colors.gif')
+        canvas.create_image(10, 10, image=my_image, anchor='nw')
+
+        # self.original = Image.open('colors.jpg')
+        # resized = self.original.resize((400, 250), Image.ANTIALIAS)
+        # self.image = ImageTk.PhotoImage(resized) # Keep a reference, prevent GC
+        # self.display = Label(self.game_hub, image = self.image)
+        # self.display.pack(padx=0, pady=0)
+
+
+        # self.image = Image.open("colors.jpg")
+        # self.photo = ImageTk.PhotoImage(self.image)
+        # self.label = Label(image = self.photo)
+        # self.label.image = self.photo                     # keep a reference!
+        # self.label.place(x=0, y=0, relwidth=1, relheight=1)
+        # self.label.pack()
+
 
         #Add an instructions label to the GUI
         self.rule = tkinter.Label(self.game_hub, text = 'Type in the color of the word. NOT the word text!', font = ('Tahoma', 12))
