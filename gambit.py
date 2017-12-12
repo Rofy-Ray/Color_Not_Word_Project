@@ -9,7 +9,8 @@
 ####################################################################################
 # Acknowledgements:
 #   Instructor: Dr. Scott Heggen
-#   T.As: Rusty Duston & Aaron Christon
+#   T.As: Rusty Dotson & Aaron Christon
+#   Code Review - Stack Exchange
 #
 # licensed under a Creative Commons
 # Attribution-Noncommercial-Share Alike 3.0 United States License.
@@ -19,6 +20,7 @@
 from tkinter import *   #Import all from the tkinter module
 import tkinter          #Import the module needed for creating a GUI
 import random           #Import the module needed for generatinf random numbers
+from PIL import ImageTk,Image
 
 class Gambit:
 
@@ -129,7 +131,12 @@ class Interface:
         '''
 
         self.game_hub.title('GUESS THE COLOR')        #Sets the title for the GUI window
-        self.game_hub.geometry('375x250')     #Sets the size of the GUI window
+        self.game_hub.geometry('400x250')     #Sets the size of the GUI window
+        self.background_image = tkinter.PhotoImage('C:\\Users\\okyereforsonr\\Google Drive\\PYTHON\\FINAL PROJECT\\Color_Not_Word_Project\\colors.jpg')
+        self.background_label = tkinter.Label(self.game_hub, image = self.background_image)
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+        # image2 =Image.open('C:\\Users\\okyereforsonr\\Google Drive\\PYTHON\\FINAL PROJECT\\colors.jpg')
+        # image1 = ImageTk.PhotoImage(image2)
 
         #Add an instructions label to the GUI
         self.rule = tkinter.Label(self.game_hub, text = 'Type in the color of the word. NOT the word text!', font = ('Tahoma', 12))
@@ -163,6 +170,13 @@ class Interface:
         self.scoresLabel = tkinter.Label(self.game_hub, text = 'Your score is: ' + str(self.gambit.score_board), font = ('Tahoma', 12))
         self.scoresLabel.pack()
 
+    def update_score_label(self):
+        '''
+        Displays the updated score of the user as they play the game
+        :return:
+        '''
+
+        self.scoresLabel.configure(text = 'Your Score is: {0}'.format(self.gambit.score_board))
 
     def timer_label(self, time_left):
         '''
@@ -186,14 +200,6 @@ class Interface:
             self.game_hub.after(1000, self.update_timer_label)
         else:
             self.text_entry.configure(height = 1, width = 20, state = 'disabled')
-
-    def update_score_label(self):
-        '''
-        Displays the updated score of the user as they play the game
-        :return:
-        '''
-
-        self.scoresLabel.configure(text = 'Your Score is: {0}'.format(self.gambit.score_board))
 
     def textbox(self):
         '''
