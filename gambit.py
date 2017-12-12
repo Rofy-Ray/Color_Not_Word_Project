@@ -3,144 +3,129 @@
 # Username: okyereforsonr
 #
 # Game: COLOR NOT WORD
-# Purpose: Create a program where the user interacts with a GUI by typing the color of words that appear in the window.
+# Purpose: Creates a program where the user interacts with a GUI by typing the color of words that appear in the window.
 #          The user MUST NOT type the word text itself, ONLY the color the text is written in.
 #          The user tries to get as many points before the timer runs out.
 ####################################################################################
 # Acknowledgements:
 #   Instructor: Dr. Scott Heggen
+#   T.As: Rusty Duston & Aaron Christon
 #
 # licensed under a Creative Commons
 # Attribution-Noncommercial-Share Alike 3.0 United States License.
 ####################################################################################
 
-# from tkinter import ttk
-from tkinter import *
-# from tkinter.ttk import *
+
+from tkinter import *   #Import all from the tkinter module
 import tkinter          #Import the module needed for creating a GUI
 import random           #Import the module needed for generatinf random numbers
-import time
 
 class Gambit:
+
     def __init__(self):
         '''
-        The initializer creates a window to contain the widgets that will be used in playing the game
+        This initializer creates the necessary variables and functions needed to run and play the game
         '''
-        self.current_word =""
-        self.current_color = ""
-        self.user_input_color = ""
-        self.color_pick = []          #List of possible colors to be picked
+
+        self.current_word = ''          #Variable to hold the random word text from the list of colors
+        self.current_color = ''         #Variable to hold the random color of the word text chosen from the list of colors
+        self.user_input_color = ''      #Variable that will hold the user input in the text box
+        self.color_pick = []            #List of possible colors to be picked
         self.score_board = 0            #Sets the starting score of the user to 0 until the game begins
-        self.time_remain = 15           #Sets each game round timer to start at 45 secs
-        self.interface = Interface(self)
-        # self.interface.score = self.score_board
-        self.interface.time_left = self.time_remain
-
-        self.extract_color()
-        # print(self.color_pick)
-        self.next_color_word()
-
-        # self.game_over()
-        self.game_timer()
-        self.interface.game_hub.after(1000, self.interface.update_timer_label)      #Runs the function again after each second
-        # self.interface.game_hub.bind('<Return>', self.game_over())              #Run the game_over() function when the Enter key is pressed
-        self.interface.game_hub.bind("<Return>", self.interface.get_user_input)
-
-        # Always last
-        self.interface.game_hub.mainloop()
+        self.time_remain = 60           #Sets each game round timer to start at 60 secs
+        self.interface = Interface(self)        #This creates a variable that references the Interface class so methods and ojects from that class can be called
+        self.interface.time_left = self.time_remain     #This passes the time_remain variable to the parameter time_left in a method in the Interface clas
+        self.extract_color()            #Function call that reads all the colors in the text file and appends them to a list to be used by the game
+        self.next_color_word()          #Function call that selects the random colors to be used for the word text and the color of the word text being displayed in the GUI
+        self.game_timer()               #Function that triggers the countdown timer being used by the game
+        self.interface.game_hub.after(1000, self.interface.update_timer_label)      #Runs the function that makes sure the timer counts down after each second
+        self.interface.game_hub.bind("<Return>", self.interface.get_user_input)     #Keypress trigger that gets the user input in the text box
+        self.interface.game_hub.mainloop()          #Infinitie loop that handles events of the game one at a time
 
     def __str__(self):
         '''
         Makes the str() function work with Gambits
         :return: A formatted string for better printing
         '''
+
         return "()".format(self.color_pick)
 
     def game_timer(self):
         '''
         Creates a timer that will be used for playing the game
-        :return:
+        :return: None
         '''
 
         if self.time_remain > 0:         #Condition runs if game is currently in session
             self.time_remain -= 1        #Decreases the amount of time left on the timer
-            self.interface.timer_label(time_left=self.time_remain)
+            self.interface.timer_label(time_left=self.time_remain)          #This displays the timerLabel in the GUI
 
     def extract_color(self):
         '''
         Gets colors from the text file and put them into a list to be used by the game
-        :return:
+        :return: None
         '''
 
-        theFile = open('color.txt', 'r')
-        myColors = theFile.readlines()
-        for i in myColors:
-            i = i[:-1]
-            self.color_pick.append(i)
-        theFile.close()
+        theFile = open('color.txt', 'r')        #Opens the color.txt file ready to read
+        myColors = theFile.readlines()          #Reads each line of the text file
+        for i in myColors:                      #Goes through all the color names that have been read from the text file
+            i = i[:-1]                          #For each color selected, it removes the break line from the end of the color name
+            self.color_pick.append(i)           #Takes all the colors that have been read from the text file and puts them in the list
+        theFile.close()                         #Closes out the file after reading the content
 
     def next_color_word(self):
         '''
         Chooses and displays the next color word text to display and the color for printing the text
-        :return:
+        :return: None
         '''
 
         if self.time_remain > 0:         #Condition runs if game is currently in session
             # self.interface.textbox()#.text_entry.focus_set()  #Makes the text entry box active if game is in session
-            self.interface.text_entry.focus_set()
+            self.interface.text_entry.focus_set()               #Sets the focus of the cursor in the text box
 
-            self.current_word = random.choice(self.color_pick)
-            self.current_color = random.choice(self.color_pick)
+            self.current_word = random.choice(self.color_pick)      #Picks a random color from the list of colors and assigns it to the current_word variable
+            self.current_color = random.choice(self.color_pick)     #Picks a random color from the list of colors and assigns it to the current_color variable
 
-            self.interface.print_out(self.current_word, self.current_color)
+            self.interface.print_out(self.current_word, self.current_color)         #This displays the word text and the color of the text in the GUI
 
     def check_for_winner(self):
-        # print("Color is: ", self.user_input_color, self.current_color)
+        '''
+        Checks to see if the user entry is equal to the randomly chosen text color. If the user entry matches the color of the text, new randomly chosen colors for
+        the word text and text color are displayed
+        :return: None
+        '''
+
         if self.user_input_color == self.current_color:     #Checks if color entered by user equals the text color
-                # print("Colors match")
                 self.score_board += 1                                #Adds one to the score of the user
-                self.interface.update_score_label()
-                # self.interface.text_entry.delete(tkinter.FIRST, tkinter.END)                   #Clears the text entry box
-                self.interface.update_print_out()
+                self.interface.update_score_label()                     #Displays the user current score
 
-    def game_over(self):
-        '''
-        Checks if game has not began and starts the timer
-        :return:
-        '''
+                self.current_word = random.choice(self.color_pick)      #Picks another random color from the list of colors and assigns it to the current_word variable
+                self.current_color = random.choice(self.color_pick)     #Picks another random color from the list of colors and assigns it to the current_color variable
+                self.interface.text_entry.delete(1.0, END)                   #Clears the text entry box
 
-        if self.time_remain == 15:               #Condition runs if there is still time left on the countdown timer
-            self.game_timer()                        #Start the countdown timer
-        # self.next_color_word()
+                self.interface.game_hub.bind('<Return>', self.interface.get_user_input)     #Gets the user input when the Enter key is pressed after user entry
+                self.user_input_color = ''                                                  #Makes sure the user input is not passed as the subsequent user input
+                self.interface.update_print_out()                                           #This displays the word text and the color of the text in the GUI
 
 class Interface:
+
     def __init__(self, game):
         '''
-
+        This initializer creates the labels that will be displayed in the GUI window of the game & creates a window to contain the widgets that will be used in playing the game
+        :param game: Reference to the Gambit class
         '''
 
-        self.gambit = game
-        self.game_hub = tkinter.Tk()           #Creates a GUI window for the game
-        self.rule = ''
-        self.scoresLabel = ''
-        self.timerLabel = ''
-        self.colorLabel = ''
-        # self.text_entry = self.textbox()
-        self.showword = ''
-        self.inputValue = ''
-        self.build_GUI()
-        self.start_label()
-        self.score_label(score=self.scoresLabel)
-        # self.print_out(word=self.showword, color=self.showword)
-        self.textbox()
-        # self.timer_label(time_left=self.timerLabel)
-        # self.retrieve_input()
-        # self.color_label()
+        self.gambit = game                      #Passes the Gmabit class to the variable gambit
+        self.game_hub = tkinter.Tk()            #Creates a GUI window for the game
+        self.scoresLabel = ''                   #Initializes the scoresLabel variable in the score_label method
+        self.build_GUI()                        #Calls the build_GUI method
+        self.score_label(score=self.scoresLabel)            #Calls the score_label method
+        self.textbox()                          #Calls the textbox method
 
     def build_GUI(self):
         '''
-
-        :return:
+        Sets the size of the GUI window, adds a title to the window and also creates a label that tells the user how to play
+        :return: None
         '''
 
         self.game_hub.title('GUESS THE COLOR')        #Sets the title for the GUI window
@@ -150,40 +135,29 @@ class Interface:
         self.rule = tkinter.Label(self.game_hub, text = 'Type in the color of the word. NOT the word text!', font = ('Tahoma', 12))
         self.rule.pack()         #Add the widget to the GUI
 
-    def start_label(self):
-        '''
-
-        :return:
-        '''
-
-        #Add a scores label to the GUI
-        self.startLabel = tkinter.Label(self.game_hub, text = 'Press Enter to begin the game.', font = ('Tahoma', 12))
-        self.startLabel.pack()         #Add the widget to the GUI
-
     def print_out(self, word, color):
         '''
-
-        :return:
+        Creates the label that displayes the colored word text in the GUI
+        :return: None
         '''
 
-        self.showword = tkinter.Label(self.game_hub, text = str(word), font = ('Tahoma', 50))
+        self.showword = tkinter.Label(self.game_hub, text = str(word), font = ('Tahoma', 60))
         self.showword.configure(foreground = color)
         self.showword.pack()
 
     def update_print_out(self):
         '''
-
-
-        :return:
+        Displays the randomly selected word text and text color as it chnages in the GUI window
+        :return: None
         '''
 
-        self.showword.configure(text = str(self.gambit.current_word), font = ('Tahoma', 50))
+        self.showword.configure(text = str(self.gambit.current_word))
         self.showword.configure(foreground = self.gambit.current_color)
 
     def score_label(self, score):
         '''
-
-        :return:
+        Creates the label that shows the user score in the GUI window
+        :return: None
         '''
 
         self.scoresLabel = tkinter.Label(self.game_hub, text = 'Your score is: ' + str(self.gambit.score_board), font = ('Tahoma', 12))
@@ -192,8 +166,8 @@ class Interface:
 
     def timer_label(self, time_left):
         '''
-
-        :return:
+        Creates the label that shows the user time remaining in the GUI window
+        :return: None
         '''
 
         #Add a time remaining label to the GUI
@@ -202,8 +176,8 @@ class Interface:
 
     def update_timer_label(self):
         '''
-
-        :return:
+        Displays the time as it counts down in the GUI window and then freezes the user text entry box when the timer gets to 0
+        :return: None
         '''
 
         if self.gambit.time_remain > 0:
@@ -211,69 +185,43 @@ class Interface:
             self.timerLabel.configure(text = 'Time remaining: ' + str(self.gambit.time_remain))
             self.game_hub.after(1000, self.update_timer_label)
         else:
-            pass
-        # self.timerLabel.pack()
+            self.text_entry.configure(height = 1, width = 20, state = 'disabled')
 
     def update_score_label(self):
         '''
-
+        Displays the updated score of the user as they play the game
         :return:
         '''
 
-        self.scoresLabel.configure(text = "Your Score is: {0}".format(self.gambit.score_board))
-
-    # def color_label(self):
-    #     '''
-    #
-    #     :return:
-    #     '''
-    #
-    #     #Add a color label to the GUI to display the colors
-    #     self.colorLabel = tkinter.Label(self.game_hub, font = ('Tahoma', 50))
-    #     self.colorLabel.pack()       #Adds the widget to the GUI
+        self.scoresLabel.configure(text = 'Your Score is: {0}'.format(self.gambit.score_board))
 
     def textbox(self):
         '''
-
-        :return:
+        Creates the text entry box in the GUI window used for user input
+        :return: None
         '''
 
         # self.text_entry = tkinter.Entry(self.game_hub)       #Creates the text entry box for the user to type in the colors
         self.text_entry = Text(self.game_hub, height = 1, width = 20)
         self.text_entry.pack()           #Add the widget to the GUI
-        # self.text_entry.focus_set()      #Sets the focus of the cursor in the text entry box
-        # buttonCommit = Button(self.game_hub, height = 1, width = 10, text = 'Submit', command = lambda: self.retrieve_input())
-        # buttonCommit.pack(pady=10)
 
     def get_user_input(self, event):
         '''
-
+        Gets the user input and then deletes the user entry in the text box afte each input. Then makes a call to the check_for_winner method in the Gmabit class
         :param event:
-        :return:
+        :return: None
         '''
 
-        # print(self.text_entry.get("1.0", 'end-1c'))
-        self.gambit.user_input_color = self.text_entry.get("1.0", 'end-1c')[:-1]
-        self.gambit.check_for_winner()
-
-
-    # def retrieve_input(self):
-    #     '''
-    #
-    #     :return:
-    #     '''
-    #
-    #     inputValue = self.text_entry.get("1.0", 'end-1c')
-    #     print(inputValue)
-    #     self.gambit.check_for_winner(inputValue)
-
+        self.gambit.user_input_color = self.text_entry.get('1.0', 'end-1c')[:-1]            #Gets the user input from the text box
+        self.text_entry.delete(1.0, END)                                                    #Clears the text box
+        self.gambit.check_for_winner()                                                      #Calls the check_for_winner method in the Gambit class
 
 def main():
     '''
-
-    :return:
+    Calls the Gambit class which runs the game
+    :return: None
     '''
     g = Gambit()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
